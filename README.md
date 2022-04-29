@@ -23,6 +23,6 @@
 - `cd DDoS-ATTACK`
 - `python3 start.py`
 - `TYPE IP ADDRESS AND PORT NUMBER`
-<p> USE NSLOOKUP for checking site (IP-ADDRESS) else; use any online IP-ADDRESS finder for getting password.
+<p> USE NSLOOKUP for checking site (IP-ADDRESS) else; use any online IP-ADDRESS finder for getting IP-ADDRESS.
 
 #### STAR THIS REPOSITORY IF YOU LIKE MY WORK ⭐
