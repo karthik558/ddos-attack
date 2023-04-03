@@ -1,28 +1,57 @@
-#### #Cybersecurity #Cybersec #Securitytalk #DDOSAttack #Breakinternet
+# Distributed Denial of Service (DDoS) Attack
 
-# <b> DDOS-ATTACK
+A Distributed Denial of Service (DDoS) attack is a type of denial of service attack in which the incoming traffic flooding the victim so that it cannot respond to legitimate traffic. This project is a simple implementation of a DDoS attack using Python and Scapy.
 
-<center><img src="assets/ddos.png"/> </center>
+![](https://img.shields.io/github/license/karthik558/ddos-attack?style=for-the-badge)
+![](https://img.shields.io/github/forks/karthik558/ddos-attack?style=for-the-badge)
+![](https://img.shields.io/github/stars/karthik558/ddos-attack?style=for-the-badge)
+![](https://img.shields.io/github/issues/karthik558/ddos-attack?style=for-the-badge)
+![](https://img.shields.io/github/languages/code-size/karthik558/ddos-attack?style=for-the-badge)
 
-### DDoS attacks occur when a cyber-criminal floods a targeted organization's network with access requests; this initially disrupts service by denying legitimate requests from actual customers, and eventually overloads the network until it crashes.
+![IMAGE](./assets/banner.png)
 
-<br>
+## Table of Contents
 
-### Criminals execute their DDoS attacks by sending out malicious code to hundreds or even thousands of computers, instructing each one to send requests to a single organization. This is usually accomplished through a botnet; a network of private computers infected with malicious software that is controlled as a group, without the knowledge of each individual owner.
-<br>
+- [Getting Started](#getting-started)
+- [Requirements](#requirements)
+- [Usage](#usage)
+- [Contributing](#contributing)
+- [License](#license)
+- [Acknowledgments](#acknowledgments)
 
-[` ALWAYS USE THIS SCRIPT ON YOUR RISK (I AM NOT RESPONSIBLE FOR ANYTHING DONE BY YOU)`]
+## Getting Started
 
-<br>
+To get started with the project, simply clone the repository to your local machine:
 
-# HOW TO RUN THIS SCRIPT ?
+`git clone https://github.com/karthik558/ddos-attack`
 
-## CLONE AND RUN YOUR FIRST ATTACK
+## Requirements
 
-- `git clone https://github.com/karthik558/DDoS-ATTACK `
-- `cd DDoS-ATTACK`
-- `python3 start.py`
-- `TYPE IP ADDRESS AND PORT NUMBER`
-<p> USE NSLOOKUP for checking site (IP-ADDRESS) else; use any online IP-ADDRESS finder for getting IP-ADDRESS.
+- Python 3.9 or higher
+- Scapy 2.4.5 or higher
+- Nslookup {optional}
+- Linux or Windows
 
-#### STAR THIS REPOSITORY IF YOU LIKE MY WORK ⭐
+## Usage
+
+To use the project, follow these steps:
+
+- Open the terminal and run the following command:
+- `pip install -r requirements.txt`
+- `python3 ddos.py`
+- Enter the _IP-address_ of the target Website/Machine and Port number [use `nslookup` to find the IP address of the target website or use any other online website to find the IP address of the target Website/Machine.]
+- Thats it! The attack will start automatically.
+
+## Contributing
+
+Contributions to the project are welcome. If you would like to suggest an improvement or report a bug, please open an issue or submit a pull request.
+
+## License
+
+This project is licensed under the [MIT License](https://opensource.org/licenses/MIT).
+
+## Acknowledgments
+
+- [Python](https://www.python.org/)
+- [Scapy](https://scapy.net/)
+- [NSLookup](https://www.nslookup.io/)
