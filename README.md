@@ -23,7 +23,9 @@ A Distributed Denial of Service (DDoS) attack is a type of denial of service att
 
 To get started with the project, simply clone the repository to your local machine:
 
-`git clone https://github.com/karthik558/ddos-attack`
+```
+git clone https://github.com/karthik558/ddos-attack.git
+```
 
 ## Requirements
 
@@ -37,8 +39,10 @@ To get started with the project, simply clone the repository to your local machi
 To use the project, follow these steps:
 
 - Open the terminal and run the following command:
+- `cd ddos-attack`
 - `pip install -r requirements.txt`
 - `python3 ddos.py`
+
 - Enter the _IP-address_ of the target Website/Machine and Port number [use `nslookup` to find the IP address of the target website or use any other online website to find the IP address of the target Website/Machine.]
 - Thats it! The attack will start automatically.
 
