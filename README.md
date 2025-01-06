@@ -15,6 +15,10 @@ A Distributed Denial of Service (DDoS) attack is a type of denial of service att
 - [Getting Started](#getting-started)
 - [Requirements](#requirements)
 - [Usage](#usage)
+- [Configuration](#configuration)
+- [Example](#example)
+- [Logging](#logging)
+- [Disclaimer](#disclaimer)
 - [Contributing](#contributing)
 - [License](#license)
 - [Acknowledgments](#acknowledgments)
@@ -29,24 +33,56 @@ git clone https://github.com/karthik558/ddos-attack.git
 
 ## Requirements
 
-- Python 3.9 or higher
-- Scapy 2.4.5 or higher
-- Nslookup {optional}
-- Linux or Windows
+- Python 3.6 or higher
+- `scapy` library for packet crafting
+- `PySocks` library for Tor support
+- Tor service installed and running on your machine
 
 ## Usage
 
-To use the project, follow these steps:
-
-- Open the terminal and run the following command:
 - `cd ddos-attack`
 - `pip install -r requirements.txt`
 - `python3 ddos.py`
 
-- Enter the _IP-address_ of the target Website/Machine and Port number [use `nslookup` to find the IP address of the target website or use any other online website to find the IP address of the target Website/Machine.]
-- Thats it! The attack will start automatically.
+### Input Prompts
 
-## Contributing
+- IP Targets: List of IPs separated by commas (e.g., 192.168.0.1, 192.168.0.2).
+- Ports: List of ports to attack, separated by commas.
+- Proxy Size: Number of packets sent per iteration (default: 10).
+- Rate Limit: Time delay between packets (default: 0.1 seconds).
+- Threads: Number of threads to use (default: 20).
+- Send via Tor: Option to use Tor for anonymity (y/n, default: y).
+
+### Configuration
+
+- Ports: [80, 443]
+- Rate Limit: 0.1 seconds
+- Threads: 20
+- Send via Tor: Yes
+
+### Example
+
+```
+$ python ddos_attack_tool.py
+IP Targets (separated by commas): 192.168.0.1, 192.168.0.2
+Ports (separated by commas): 80, 443
+Proxy Size: 10
+Rate Limit (seconds between packets): 0.1
+User-Agent: Mozilla/5.0
+Data Size (bytes): 600
+Threads: 20
+Send via Tor? (y/n): y
+```
+
+## Logging
+
+This tool is for educational purposes only. Do not use it for any malicious or illegal activity. Always ensure you have permission to test any network.
+
+## Disclaimer
+
+The author is not responsible for any misuse of this tool. Please use responsibly and ethically.
+
+## Contributing:
 
 Contributions to the project are welcome. If you would like to suggest an improvement or report a bug, please open an issue or submit a pull request.
 
@@ -57,5 +93,4 @@ This project is licensed under the [MIT License](https://opensource.org/licenses
 ## Acknowledgments
 
 - [Python](https://www.python.org/)
-- [Scapy](https://scapy.net/)
-- [NSLookup](https://www.nslookup.io/)
+- [Tor](https://www.torproject.org/)
