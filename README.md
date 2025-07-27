@@ -1,4 +1,4 @@
-![Banner](assets/banner.png)
+![Banner](https://raw.githubusercontent.com/FoORK-Lab/pass-gen-dependencies/refs/heads/main/ddos_attack_banner.png)
 
 # Advanced DDoS Attack Tool
 
