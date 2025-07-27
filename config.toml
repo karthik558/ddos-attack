@@ -1,0 +1,38 @@
+# Example configuration file for DDoS Attack Tool
+# Copy this to ~/.config/ddos-attack/config.toml
+
+[general]
+log_level = "info"
+log_file = "ddos_attack.log"
+max_threads = 1000
+default_timeout = 30
+
+[layer4]
+default_packet_size = 1024
+default_rate = 1000
+default_protocol = "tcp"
+enable_spoofing = false
+
+[layer7]
+default_user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+default_method = "GET"
+default_rate = 100
+connection_timeout = 10
+
+[tor]
+socks_port = 9050
+control_port = 9051
+data_directory = "/tmp/tor-data"
+auto_renew_interval = 600  # seconds
+
+[targets]
+# Predefined target lists for quick access
+web_servers = ["80", "443", "8080", "8443"]
+dns_servers = ["53"]
+mail_servers = ["25", "465", "587", "993", "995"]
+database_servers = ["3306", "5432", "1433", "27017"]
+
+[payloads]
+# Custom payload templates
+http_get = "GET / HTTP/1.1\r\nHost: {host}\r\nUser-Agent: {user_agent}\r\nConnection: keep-alive\r\n\r\n"
+http_post = "POST / HTTP/1.1\r\nHost: {host}\r\nUser-Agent: {user_agent}\r\nContent-Length: {length}\r\nContent-Type: application/x-www-form-urlencoded\r\n\r\n{data}"

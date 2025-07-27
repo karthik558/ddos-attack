@@ -1,0 +1,42 @@
+[package]
+name = "ddos-attack-rust"
+version = "0.1.0"
+edition = "2021"
+authors = ["karthik558"]
+description = "Advanced DDoS attack tool with Layer 4/7 support, IP spoofing, and Tor integration"
+
+[dependencies]
+tokio = { version = "1.0", features = ["full"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+clap = { version = "4.0", features = ["derive"] }
+colored = "2.0"
+rand = "0.8"
+log = "0.4"
+env_logger = "0.10"
+chrono = { version = "0.4", features = ["serde"] }
+anyhow = "1.0"
+bytes = "1.4"
+futures = "0.3"
+reqwest = { version = "0.11", features = ["json", "socks"] }
+pnet = "0.34"
+libc = "0.2"
+url = "2.4"
+base64 = "0.21"
+
+# Simplified Tor integration using reqwest proxy
+# Remove arti-client and tor-rtcompat for now to avoid version conflicts
+
+[dev-dependencies]
+tokio-test = "0.4"
+
+[features]
+default = ["layer4", "layer7", "tor", "spoofing"]
+layer4 = []
+layer7 = []
+tor = []
+spoofing = []
+
+[[bin]]
+name = "ddos-attack"
+path = "src/main.rs"
