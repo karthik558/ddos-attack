@@ -1,108 +1,63 @@
 #!/bin/bash
 
-# Deployment script for DDoS Attack Tool - Rust Edition
-# This script sets up the environment and installs dependencies
+echo "📦 Installing Advanced DDoS Attack Tool..."
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 
-set -e
-
-INSTALL_DIR="/opt/ddos-attack"
-CONFIG_DIR="$HOME/.config/ddos-attack"
-BIN_DIR="/usr/local/bin"
-
-echo "DDoS Attack Tool - Rust Edition Installer"
-echo "========================================="
-
-# Check for root privileges
-if [[ $EUID -eq 0 ]]; then
-    echo "Running as root - system-wide installation"
-    SYSTEM_INSTALL=true
-else
-    echo "Running as user - local installation"
-    SYSTEM_INSTALL=false
-    INSTALL_DIR="$HOME/.local/share/ddos-attack"
-    BIN_DIR="$HOME/.local/bin"
+# Check if binary exists
+if [ ! -f "./target/release/ddos-attack" ]; then
+    echo "❌ Binary not found! Please run ./build.sh first."
+    exit 1
 fi
 
-# Check dependencies
-echo "Checking dependencies..."
-
-# Check Rust
-if ! command -v rustc &> /dev/null; then
-    echo "Installing Rust..."
-    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
-    source $HOME/.cargo/env
+# Check if running as root
+if [ "$EUID" -ne 0 ]; then
+    echo "⚠️  This script requires root privileges for system-wide installation."
+    echo "   Please run: sudo ./install.sh"
+    exit 1
 fi
 
-# Check Tor (optional)
-if ! command -v tor &> /dev/null; then
-    echo "Warning: Tor not found. Installing Tor..."
-    if [[ "$OSTYPE" == "linux-gnu"* ]]; then
-        if command -v apt-get &> /dev/null; then
-            sudo apt-get update && sudo apt-get install -y tor
-        elif command -v yum &> /dev/null; then
-            sudo yum install -y tor
-        elif command -v pacman &> /dev/null; then
-            sudo pacman -S tor
-        fi
-    elif [[ "$OSTYPE" == "darwin"* ]]; then
-        if command -v brew &> /dev/null; then
-            brew install tor
-        else
-            echo "Please install Homebrew first, then run: brew install tor"
-        fi
-    fi
+# Install locations
+INSTALL_DIR="/usr/local/bin"
+BINARY_NAME="ddos-attack"
+DOCS_DIR="/usr/local/share/doc/ddos-attack"
+
+echo "🔧 Installing to system directories..."
+
+# Copy binary
+cp "./target/release/ddos-attack" "$INSTALL_DIR/$BINARY_NAME"
+chmod +x "$INSTALL_DIR/$BINARY_NAME"
+
+# Create docs directory
+mkdir -p "$DOCS_DIR"
+
+# Copy documentation
+cp README.md "$DOCS_DIR/"
+cp LICENSE "$DOCS_DIR/"
+
+# Create examples directory
+mkdir -p "$DOCS_DIR/examples"
+if [ -d "examples" ]; then
+    cp examples/* "$DOCS_DIR/examples/"
 fi
 
-# Create directories
-echo "Creating directories..."
-mkdir -p "$INSTALL_DIR"
-mkdir -p "$CONFIG_DIR"
-mkdir -p "$BIN_DIR"
-
-# Copy files
-echo "Copying files..."
-cp -r . "$INSTALL_DIR"
-
-# Build the project
-echo "Building project..."
-cd "$INSTALL_DIR"
-cargo build --release
-
-# Create symlink
-echo "Creating symlink..."
-ln -sf "$INSTALL_DIR/target/release/ddos-attack" "$BIN_DIR/ddos-attack"
-
-# Copy config file
-if [ ! -f "$CONFIG_DIR/config.toml" ]; then
-    cp config.toml "$CONFIG_DIR/config.toml"
-    echo "Configuration file created at $CONFIG_DIR/config.toml"
-fi
-
-# Set permissions
-if [ "$SYSTEM_INSTALL" = true ]; then
-    # For IP spoofing capabilities
-    setcap cap_net_raw+ep "$INSTALL_DIR/target/release/ddos-attack" 2>/dev/null || {
-        echo "Warning: Could not set raw socket capabilities. Run as root for IP spoofing."
-    }
-fi
-
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo "✅ Installation completed successfully!"
 echo ""
-echo "✅ Installation complete!"
+echo "📍 Binary installed to: $INSTALL_DIR/$BINARY_NAME"
+echo "📚 Documentation: $DOCS_DIR"
 echo ""
-echo "Binary installed to: $BIN_DIR/ddos-attack"
-echo "Configuration: $CONFIG_DIR/config.toml"
+echo "🎯 You can now run the tool from anywhere:"
+echo "  ddos-attack --help"
+echo "  ddos-attack layer7 --targets \"https://example.com\" --cloudflare-bypass"
 echo ""
-echo "Usage examples:"
-echo "  ddos-attack layer4 --targets \"192.168.1.1\" --protocol tcp"
-echo "  ddos-attack layer7 --targets \"https://example.com\""
-echo "  ddos-attack tor --start"
+echo "🔧 Advanced Features:"
+echo "  • Cloudflare Challenge Solving"
+echo "  • WAF Bypass Techniques"
+echo "  • DNS Amplification (70x factor)"
+echo "  • User-Agent Database (1000+ signatures)"
+echo "  • Tor Integration"
 echo ""
-echo "⚠️  IMPORTANT: Use this tool only for authorized testing!"
-echo "⚠️  Read the documentation and legal notices before use."
-
-# Add to PATH if not already there
-if [[ ":$PATH:" != *":$BIN_DIR:"* ]]; then
-    echo ""
-    echo "Add to your shell profile:"
-    echo "  export PATH=\"$BIN_DIR:\$PATH\""
-fi
+echo "⚠️  LEGAL NOTICE:"
+echo "   This tool is for authorized penetration testing only."
+echo "   The developers are not responsible for misuse."
+echo "   Always ensure you have proper authorization."

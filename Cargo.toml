@@ -23,6 +23,24 @@ pnet = "0.34"
 libc = "0.2"
 url = "2.4"
 base64 = "0.21"
+# Advanced evasion dependencies
+uuid = "1.0"
+rustls = "0.21"
+trust-dns-resolver = "0.23"
+regex = "1.10"
+hickory-resolver = "0.24"
+# User-Agent database
+fake-useragent = "0.1"
+# HTTP/2 support
+h2 = "0.3"
+# Proxy support
+socks = "0.3"
+# WebSocket support
+tokio-tungstenite = "0.20"
+# YAML config support
+serde_yaml = "0.9"
+# Machine learning for adaptive attacks (optional)
+linfa = { version = "0.7", optional = true }
 
 # Simplified Tor integration using reqwest proxy
 # Remove arti-client and tor-rtcompat for now to avoid version conflicts

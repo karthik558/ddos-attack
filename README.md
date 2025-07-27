@@ -14,6 +14,16 @@ This is a high-performance DDoS testing tool written in Rust, featuring:
 - **Multi-threading**: Lightning-fast concurrent operations
 - **Cross-platform**: Works on Linux, macOS, and Windows
 
+## 🚀 Advanced Evasion Features
+
+- **Cloudflare Bypass**: Automatic challenge solving and TLS fingerprint evasion
+- **WAF Evasion**: Advanced payload encoding and header manipulation
+- **User-Agent Database**: 1000+ real browser signatures with rotation
+- **Fingerprint Evasion**: JA3/HTTP2 fingerprint randomization
+- **Stealth Mode**: Anti-detection with behavioral mimicry
+- **DNS Amplification**: High-impact reflection attacks
+- **Proxy Integration**: SOCKS5/HTTP proxy chain support
+
 ## Requirements
 
 ### System Requirements
@@ -126,6 +136,36 @@ The tool now automatically asks you about Tor usage and IP spoofing when you run
 
 # The tool will ask:
 # 🔒 Do you want to use Tor for anonymity? (y/N): 
+```
+
+#### Advanced HTTP Attack with Evasion
+```bash
+./target/release/ddos-attack layer7 \
+  --targets "https://example.com" \
+  --threads 100 \
+  --rate 200 \
+  --method GET \
+  --cloudflare-bypass \
+  --waf-evasion \
+  --random-useragent
+
+# Includes:
+# - Cloudflare challenge bypass
+# - WAF evasion techniques
+# - Random User-Agent rotation
+```
+
+#### DNS Amplification Attack
+```bash
+./target/release/ddos-attack dns-amp \
+  --target "192.168.1.100" \
+  --domain "google.com" \
+  --threads 20 \
+  --rate 500 \
+  --duration 300
+
+# High-impact reflection attack
+# Up to 70x amplification factor
 ```
 
 #### Slowloris Attack

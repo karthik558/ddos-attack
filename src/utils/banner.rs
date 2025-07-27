@@ -18,7 +18,8 @@ pub fn display() {
     "#;
     
     println!("{}", banner.bright_red().bold());
-    println!("{}", "           Advanced DDoS Testing Tool".bright_green().bold());
-    println!("{}", "               By KARTHIK-LAL".bright_cyan().italic());
+    println!("{}", "         High-Performance DDoS Testing Suite".bright_green().bold());
+    println!("{}", "        🚀 Rust-Powered | 🔒 Tor-Enabled | 🎯 Advanced Evasion".bright_cyan());
+    println!("{}", "                  By KARTHIK-LAL".bright_yellow().italic());
     println!();
 }
